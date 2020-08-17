@@ -1,7 +1,9 @@
 package com.rlsp.springboot.fundamentals;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 /**
  * Inicia a aplicacao WEB no SpringBoot2
  * @author rlatorraca
@@ -14,11 +16,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 
+//@EnableAutoConfiguration
+//@ComponentScan(basePackages = "com.rlsp.springboot.fundamentals.endpoint")
 @SpringBootApplication
 public class RlspSpringbootFundamentalsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RlspSpringbootFundamentalsApplication.class, args);
+		SpringApplication.run(RlspSpringbootFundamentalsApplication.class, args); //Inicializa o SPRINGBOOT e Aplication
 	}
 
 }

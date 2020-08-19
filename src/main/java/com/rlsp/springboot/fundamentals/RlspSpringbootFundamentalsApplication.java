@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class RlspSpringbootFundamentalsApplication {
 
+	//inicializa o Spring Boot
 	public static void main(String[] args) {
 		SpringApplication.run(RlspSpringbootFundamentalsApplication.class, args); //Inicializa o SPRINGBOOT e Aplication
 	}

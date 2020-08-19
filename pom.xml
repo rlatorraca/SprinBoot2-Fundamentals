@@ -42,6 +42,13 @@
 			<!-- true = apenas sera executado em desenvolvimento, nao quando usado java -jar -->
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- Lombok  - Adicionar GETTERS, SETTER , CONSTRUCTORS and LOGS da aplicacao-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

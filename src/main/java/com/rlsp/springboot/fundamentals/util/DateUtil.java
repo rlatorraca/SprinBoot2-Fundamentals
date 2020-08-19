@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @author rlatorraca
  *
  */
-@Component // ==> Marca que a CLASSE sera SCANEADO pelo @ComponentScan (no classe de inicializacao)
+@Component // ==> Marca que a CLASSE sera SCANEADA pelo @ComponentScan (no classe de inicializacao)
 public class DateUtil {
 
 	public String formatLocalDateTimeToDBStyle (LocalDateTime localDateTime) {

@@ -9,19 +9,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
-import com.rlsp.springboot.fundamentals.error.CustomErrorType;
 import com.rlsp.springboot.fundamentals.repository.AnimeRepository;
-import com.rlsp.springboot.fundamentals.util.DateUtil;
+import com.rlsp.springboot.fundamentals.util.Utils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +50,7 @@ public class AnimeController {
 	
 	 // Faz a injecao de DEPENDENCIA, instanciando o Objeto
 	@Autowired
-	private DateUtil dateUtil;
+	private Utils dateUtil;
 	
 	@Autowired
 	private AnimeRepository animeRepository;
@@ -72,14 +72,10 @@ public class AnimeController {
 	 * 
 	 * @PathVariable => usado para pegar o ID da assinatura da requisicao
 	 */
-	@RequestMapping(path="/{id}")
+	@GetMapping(path ="/{id}")
 	private ResponseEntity<?> getAnimeBydId(@PathVariable("id") int id){
-		Anime animeFound =  animeRepository.listAll()
-								.stream()
-									.filter(anime -> anime.getId() == id)
-									.findFirst()
-										.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Anime not Found"));		 
-		return ResponseEntity.ok(animeFound);
+		 
+		return ResponseEntity.ok(animeRepository.findById(id));
 	}
 	
 	/**
@@ -95,6 +91,18 @@ public class AnimeController {
 		return ResponseEntity.ok(animeRepository.save(anime));
 	}
 	
+	@DeleteMapping(path ="/{id}")
+	private ResponseEntity<?> deleteAnimeBydId(@PathVariable("id") int id){
+	
+		animeRepository.delete(id);	
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No_Content is a success response + don,t return any information
+	}
+	
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody Anime anime){
+		animeRepository.update(anime);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 }
 
 

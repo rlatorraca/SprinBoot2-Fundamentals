@@ -5,9 +5,9 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
+import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundExcpection;
 import com.rlsp.springboot.fundamentals.repository.AnimeRepository;
 
 /**
@@ -31,6 +31,6 @@ public class Utils {
 		
 		return animeRepository
 					.findById(id)
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime Not Found"));
+					.orElseThrow(() -> new ResourceNotFoundExcpection("Anime Not Found"));
 	}
 }

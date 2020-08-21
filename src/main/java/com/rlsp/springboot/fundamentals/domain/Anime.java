@@ -6,12 +6,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;;
 
 // Gera GETTERS and SETTERS, HASHCODE and EQUALS
 @AllArgsConstructor // gera construtor com todos os atrinburos
 @Data
 @Entity
+@Builder
 public class Anime {
 
 	@Id

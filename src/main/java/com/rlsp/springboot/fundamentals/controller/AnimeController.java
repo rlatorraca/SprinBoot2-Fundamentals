@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
-import com.rlsp.springboot.fundamentals.repository.AnimeRepository;
+import com.rlsp.springboot.fundamentals.service.AnimeService;
 import com.rlsp.springboot.fundamentals.util.Utils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +53,7 @@ public class AnimeController {
 	private Utils dateUtil;
 	
 	@Autowired
-	private AnimeRepository animeRepository;
+	private AnimeService animeService;
 	
 	
 	/**
@@ -63,7 +63,7 @@ public class AnimeController {
 	@GetMapping("/list")
 	private ResponseEntity<List<Anime>> listAll(){
 		logger.info("Date formatted {}", dateUtil.formatLocalDateTimeToDBStyle(LocalDateTime.now()));
-		return new ResponseEntity<>(animeRepository.listAll(), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
+		return new ResponseEntity<>(animeService.listAll(), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
 		//return ResponseEntity.ok(animeRepository.listAll()); => tera o mesmo resultado que o de cima
 	}
 	
@@ -75,7 +75,7 @@ public class AnimeController {
 	@GetMapping(path ="/{id}")
 	private ResponseEntity<?> getAnimeBydId(@PathVariable("id") int id){
 		 
-		return ResponseEntity.ok(animeRepository.findById(id));
+		return ResponseEntity.ok(animeService.findById(id));
 	}
 	
 	/**
@@ -88,19 +88,19 @@ public class AnimeController {
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Anime anime){
 		
-		return ResponseEntity.ok(animeRepository.save(anime));
+		return ResponseEntity.ok(animeService.save(anime));
 	}
 	
 	@DeleteMapping(path ="/{id}")
 	private ResponseEntity<?> deleteAnimeBydId(@PathVariable("id") int id){
 	
-		animeRepository.delete(id);	
+		animeService.delete(id);	
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No_Content is a success response + don,t return any information
 	}
 	
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody Anime anime){
-		animeRepository.update(anime);
+		animeService.update(anime);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

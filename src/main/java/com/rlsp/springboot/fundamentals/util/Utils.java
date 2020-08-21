@@ -2,13 +2,13 @@ package com.rlsp.springboot.fundamentals.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
+import com.rlsp.springboot.fundamentals.repository.AnimeRepository;
 
 /**
  * @Repository ==> especializacao de @Component para ser utulizada com DAO, faz com queas EXCECOES nao checadas 
@@ -27,11 +27,10 @@ public class Utils {
 				
 	}
 	
-	public Anime findAnimeOrThrowNotFound(int id, List<Anime> animesList) {
+	public Anime findAnimeOrThrowNotFound(int id, AnimeRepository animeRepository) {
 		
-		return animesList.stream()
-						 .filter(anime -> anime.getId() == id)
-						 .findFirst()
-						 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime Not Found"));
+		return animeRepository
+					.findById(id)
+					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime Not Found"));
 	}
 }

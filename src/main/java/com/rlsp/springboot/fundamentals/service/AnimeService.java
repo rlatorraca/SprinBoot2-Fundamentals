@@ -41,6 +41,10 @@ public class AnimeService {
 		return util.findAnimeOrThrowNotFound(id, animeRepository);
 	}
 	
+	public List<Anime> findByName(String name) {
+		return animeRepository.findByName(name);
+	}
+	
 	public void update (Anime anime) {
 		animeRepository.save(anime);
 		

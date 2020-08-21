@@ -8,8 +8,9 @@ import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;;
 
-@Data // Gera GETTERS and SETTERS, HASHCODE and EQUALS
+// Gera GETTERS and SETTERS, HASHCODE and EQUALS
 @AllArgsConstructor // gera construtor com todos os atrinburos
+@Data
 @Entity
 public class Anime {
 
@@ -17,5 +18,11 @@ public class Anime {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+	
+    public Anime() {
+		super();
+	}
+    
+    
 
 }

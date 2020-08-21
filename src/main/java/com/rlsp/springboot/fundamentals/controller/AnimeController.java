@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -68,7 +69,7 @@ public class AnimeController {
 	}
 	
 	/**
-	 * Metodo para buscar um valor da lista de Students
+	 * Metodo para buscar um valor da lista de Animes
 	 * 
 	 * @PathVariable => usado para pegar o ID da assinatura da requisicao
 	 */
@@ -77,6 +78,18 @@ public class AnimeController {
 		 
 		return ResponseEntity.ok(animeService.findById(id));
 	}
+	
+	/**
+	 * Metodo para buscar por nome os Animes
+	 * @RequestParams : usado para passar o parametros de requisicoes GET (?)
+	 * 
+	 */
+	@GetMapping(path ="/find")
+	private ResponseEntity<?> getAnimeBydId(@RequestParam(value="name") String name){
+		 
+		return ResponseEntity.ok(animeService.findByName(name));
+	}
+	
 	
 	/**
 	 * Exsitem 4 modos para retorna um POST

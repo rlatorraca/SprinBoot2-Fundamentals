@@ -2,11 +2,14 @@ package com.rlsp.springboot.fundamentals.controller;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
 import com.rlsp.springboot.fundamentals.service.AnimeService;
@@ -62,9 +64,9 @@ public class AnimeController {
 	 * @return
 	 */
 	@GetMapping("/list")
-	private ResponseEntity<List<Anime>> listAll(){
+	private ResponseEntity<Page<Anime>> listAll(Pageable pageable){
 		logger.info("Date formatted {}", dateUtil.formatLocalDateTimeToDBStyle(LocalDateTime.now()));
-		return new ResponseEntity<>(animeService.listAll(), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
+		return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
 		//return ResponseEntity.ok(animeRepository.listAll()); => tera o mesmo resultado que o de cima
 	}
 	
@@ -99,7 +101,7 @@ public class AnimeController {
 	 * 4) Retornando o padrao HATEOS
 	 */
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Anime anime){
+	public ResponseEntity<?> save(@RequestBody @Valid Anime anime){
 		
 		return ResponseEntity.ok(animeService.save(anime));
 	}

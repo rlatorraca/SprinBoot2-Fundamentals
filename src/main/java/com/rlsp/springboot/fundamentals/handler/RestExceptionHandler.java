@@ -1,14 +1,28 @@
 package com.rlsp.springboot.fundamentals.handler;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.util.WebUtils;
 
+import com.rlsp.springboot.fundamentals.exception.ExceptionDetails;
 import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundDetails;
 import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundExcpection;
+import com.rlsp.springboot.fundamentals.exception.ValidationExpectionDetails;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Por padrão, os métodos em um @ControllerAdvice se aplicam globalmente a todos os controladores. 
@@ -23,12 +37,17 @@ import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundExcpection;
  *
  */
 @ControllerAdvice
-public class RestExceptionHandler {
+public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 
+	/**
+	 * Manuseia o erro quando o Recurso nao for encontrado
+	 * @param resourceNotFoundExcpection
+	 * @return
+	 */
 	@ExceptionHandler(ResourceNotFoundExcpection.class)
 	public ResponseEntity<ResourceNotFoundDetails> handleResourceNotFoundExcpection(ResourceNotFoundExcpection resourceNotFoundExcpection) {
 		
-		return new ResponseEntity<ResourceNotFoundDetails>(
+		return new ResponseEntity<>(
 					ResourceNotFoundDetails.builder()
 						.timestamp(LocalDateTime.now())
 						.status(HttpStatus.NOT_FOUND.value())
@@ -36,5 +55,50 @@ public class RestExceptionHandler {
 						.title("Sorry ...  Resource not Found !")
 						.developerMessage(resourceNotFoundExcpection.getClass().getCanonicalName())
 						.build(), HttpStatus.NOT_FOUND);
+	}
+	
+	/**
+	 * MManuseio o erro de NAO RESPEITO as validacoes dos campos da clase
+	 * @param methodArgumentNotValidException
+	 * @return
+	 */
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+		
+		String fields = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(" , "));
+		String fieldsMessages = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(" , "));
+		
+		
+		return new ResponseEntity<>(
+				ValidationExpectionDetails.builder()
+						.timestamp(LocalDateTime.now())
+						.status(HttpStatus.BAD_REQUEST.value())
+						.details("Wrong fields is following")
+						.title("Sorry ...  Field(s) validation Error !")
+						.developerMessage(exception.getClass().getCanonicalName())
+						.field(fields)
+						.fieldMessage(fieldsMessages)
+						.build(), HttpStatus.BAD_REQUEST);
+	}
+	
+	/**
+	 * Faz a sobrescrita handleExceptionInternal (Erros Internos do Servidor) para o nosso padrao com messagens objetivas e curtas 
+	 */
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(
+			Exception exception, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+					.timestamp(LocalDateTime.now())
+					.status(status.value())
+					.details(exception.getMessage())
+					.title(exception.getCause().getMessage())
+					.developerMessage(exception.getClass().getCanonicalName())
+					.build();
+		
+		return new ResponseEntity<>(exceptionDetails, headers, status);
 	}
 }

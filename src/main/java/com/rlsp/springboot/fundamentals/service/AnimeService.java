@@ -1,12 +1,11 @@
 package com.rlsp.springboot.fundamentals.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
 import com.rlsp.springboot.fundamentals.repository.AnimeRepository;
@@ -24,10 +23,11 @@ public class AnimeService {
 	
 		
 
-	public List<Anime> listAll() {
-		return animeRepository.findAll();
+	public Page<Anime> listAll(Pageable pageable) {
+		return animeRepository.findAll(pageable);
 	}
 	
+	@Transactional
 	public Anime save(Anime anime) {
 		return animeRepository.save(anime);
 	}

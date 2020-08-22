@@ -5,7 +5,8 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-public class ResourceNotFoundDetails extends ExceptionDetails {
+public class ValidationExpectionDetails extends ExceptionDetails{
 
-
+	private String field;
+	private String fieldMessage;
 }

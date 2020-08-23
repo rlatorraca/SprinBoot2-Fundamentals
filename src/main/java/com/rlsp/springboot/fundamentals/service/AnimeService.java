@@ -27,6 +27,7 @@ public class AnimeService {
 		return animeRepository.findAll(pageable);
 	}
 	
+	
 	@Transactional
 	public Anime save(Anime anime) {
 		return animeRepository.save(anime);
@@ -47,6 +48,7 @@ public class AnimeService {
 	
 	public void update (Anime anime) {
 		animeRepository.save(anime);
+		
 		
 	}
 	

@@ -70,6 +70,13 @@ public class AnimeController {
 		//return ResponseEntity.ok(animeRepository.listAll()); => tera o mesmo resultado que o de cima
 	}
 	
+//	@GetMapping("/list")
+//	private ResponseEntity<List<Anime>> listAll(){
+//		
+//		return new ResponseEntity<>(animeService.listAll(), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
+//
+//	}
+	
 	/**
 	 * Metodo para buscar um valor da lista de Animes
 	 * 

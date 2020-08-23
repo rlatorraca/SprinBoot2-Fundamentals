@@ -15,6 +15,7 @@ import lombok.Data;;
 @AllArgsConstructor // gera construtor com todos os atrinburos
 @Data
 @Entity
+@Builder
 public class Anime {
 
 	@Id

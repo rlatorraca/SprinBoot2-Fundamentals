@@ -19,7 +19,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.rlsp.springboot.fundamentals.exception.ExceptionDetails;
 import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundDetails;
-import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundExcpection;
+import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundException;
 import com.rlsp.springboot.fundamentals.exception.ValidationExpectionDetails;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +44,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 	 * @param resourceNotFoundExcpection
 	 * @return
 	 */
-	@ExceptionHandler(ResourceNotFoundExcpection.class)
-	public ResponseEntity<ResourceNotFoundDetails> handleResourceNotFoundExcpection(ResourceNotFoundExcpection resourceNotFoundExcpection) {
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ResourceNotFoundDetails> handleResourceNotFoundExcpection(ResourceNotFoundException resourceNotFoundExcpection) {
 		
 		return new ResponseEntity<>(
 					ResourceNotFoundDetails.builder()

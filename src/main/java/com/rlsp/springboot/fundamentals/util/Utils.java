@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
-import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundExcpection;
+import com.rlsp.springboot.fundamentals.exception.ResourceNotFoundException;
 import com.rlsp.springboot.fundamentals.repository.AnimeRepository;
 
 /**
@@ -31,6 +31,6 @@ public class Utils {
 		
 		return animeRepository
 					.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundExcpection("Anime Not Found"));
+					.orElseThrow(() -> new ResourceNotFoundException("Anime Not Found"));
 	}
 }

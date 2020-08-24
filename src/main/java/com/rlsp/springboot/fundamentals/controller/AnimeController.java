@@ -2,6 +2,7 @@ package com.rlsp.springboot.fundamentals.controller;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -64,10 +65,10 @@ public class AnimeController {
 	 * @return
 	 */
 	@GetMapping("/list")
-	private ResponseEntity<Page<Anime>> listAll(Pageable pageable){
-		logger.info("Date formatted {}", dateUtil.formatLocalDateTimeToDBStyle(LocalDateTime.now()));
-		return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
-		//return ResponseEntity.ok(animeRepository.listAll()); => tera o mesmo resultado que o de cima
+	public ResponseEntity<Page<Anime>> listAll(Pageable pageable){
+		//logger.info("Date formatted {}", dateUtil.formatLocalDateTimeToDBStyle(LocalDateTime.now()));
+		//return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
+		return ResponseEntity.ok(animeService.listAll(pageable));// => tera o mesmo resultado que o de cima
 	}
 	
 //	@GetMapping("/list")
@@ -83,7 +84,7 @@ public class AnimeController {
 	 * @PathVariable => usado para pegar o ID da assinatura da requisicao
 	 */
 	@GetMapping(path ="/{id}")
-	private ResponseEntity<?> getAnimeBydId(@PathVariable("id") int id){
+	public ResponseEntity<Anime> getAnimeBydId(@PathVariable("id") int id){
 		 
 		return ResponseEntity.ok(animeService.findById(id));
 	}
@@ -94,7 +95,7 @@ public class AnimeController {
 	 * 
 	 */
 	@GetMapping(path ="/find")
-	private ResponseEntity<?> getAnimeBydId(@RequestParam(value="name") String name){
+	public ResponseEntity<List<Anime>> findAnimeBydId(@RequestParam(value="name") String name){
 		 
 		return ResponseEntity.ok(animeService.findByName(name));
 	}
@@ -108,20 +109,20 @@ public class AnimeController {
 	 * 4) Retornando o padrao HATEOS
 	 */
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody @Valid Anime anime){
+	public ResponseEntity<Anime> save(@RequestBody @Valid Anime anime){
 		
 		return ResponseEntity.ok(animeService.save(anime));
 	}
 	
 	@DeleteMapping(path ="/{id}")
-	private ResponseEntity<?> deleteAnimeBydId(@PathVariable("id") int id){
+	public ResponseEntity<Anime> deleteAnimeBydId(@PathVariable("id") int id){
 	
 		animeService.delete(id);	
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No_Content is a success response + don,t return any information
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Anime anime){
+	public ResponseEntity<Anime> update(@RequestBody Anime anime){
 		animeService.update(anime);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

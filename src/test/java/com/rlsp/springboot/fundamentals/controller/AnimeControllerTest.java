@@ -70,7 +70,7 @@ class AnimeControllerTest {
     public void findById_ReturnListOfAnimesInsidePageObject_WhenSuccessful() {
         Integer expectedId = AnimeCreator.createValidAnime().getId();
 
-        Anime anime = animeController.getAnimeBydId(1).getBody();
+        Anime anime = animeController.getAnimeBydId(1, null).getBody();
 
         Assertions.assertThat(anime).isNotNull();
 

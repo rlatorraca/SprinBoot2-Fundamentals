@@ -1,7 +1,6 @@
 package com.rlsp.springboot.fundamentals.controller;
 
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +67,7 @@ public class AnimeController {
 	 * @return
 	 */
 	@GetMapping("/list")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Page<Anime>> listAll(Pageable pageable){
 		//logger.info("Date formatted {}", dateUtil.formatLocalDateTimeToDBStyle(LocalDateTime.now()));
 		//return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
@@ -84,8 +87,9 @@ public class AnimeController {
 	 * @PathVariable => usado para pegar o ID da assinatura da requisicao
 	 */
 	@GetMapping(path ="/{id}")
-	public ResponseEntity<Anime> getAnimeBydId(@PathVariable("id") int id){
-		 
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity<Anime> getAnimeBydId(@PathVariable("id") int id, @AuthenticationPrincipal UserDetails userDetails){
+		 log.info("User Logged in {} ", userDetails);
 		return ResponseEntity.ok(animeService.findById(id));
 	}
 	
@@ -94,6 +98,7 @@ public class AnimeController {
 	 * @RequestParams : usado para passar o parametros de requisicoes GET (?)
 	 * 
 	 */
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(path ="/find")
 	public ResponseEntity<List<Anime>> findAnimeBydId(@RequestParam(value="name") String name){
 		 
@@ -115,6 +120,7 @@ public class AnimeController {
 	}
 	
 	@DeleteMapping(path ="/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Anime> deleteAnimeBydId(@PathVariable("id") int id){
 	
 		animeService.delete(id);	
@@ -122,6 +128,7 @@ public class AnimeController {
 	}
 	
 	@PutMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Anime> update(@RequestBody Anime anime){
 		animeService.update(anime);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

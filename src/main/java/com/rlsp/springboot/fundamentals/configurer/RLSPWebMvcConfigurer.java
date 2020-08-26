@@ -1,4 +1,4 @@
-package com.rlsp.springboot.fundamentals.configures;
+package com.rlsp.springboot.fundamentals.configurer;
 
 import java.util.List;
 

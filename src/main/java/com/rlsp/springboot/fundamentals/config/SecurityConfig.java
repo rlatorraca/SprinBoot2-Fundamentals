@@ -1,36 +1,54 @@
 package com.rlsp.springboot.fundamentals.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import com.rlsp.springboot.fundamentals.service.LoginUserDetailsService;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 
 @EnableWebSecurity
 @Slf4j
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true) 
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	private LoginUserDetailsService loginUserDetailsService; 
 
 	// passawor para o usuarioem memoria
+	@Autowired
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		PasswordEncoder passwordEnconder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		log.info("Password encryptation testing {}", passwordEnconder.encode("teste"));
+	    PasswordEncoder passEncoder = passwordEncoderMethod();
 		auth.inMemoryAuthentication()
 			.withUser("rlsp")
-			.password(passwordEnconder.encode("123"))
+			.password(passEncoder.encode("123"))
 			.roles("USER")
 			.and()
-			.withUser("admin")
-			.password(passwordEnconder.encode("1234"))
-			.roles("USER", "ADMIN");
+			.withUser("rodrigo")
+			.password(passEncoder.encode("1234"))
+			.roles("USER", "ADMIN");  
+		
+		log.info("Password encryptation testing {}", passEncoder.encode("teste"));
+		auth.userDetailsService(loginUserDetailsService).passwordEncoder(passEncoder);
 			
 	}
+	  
+
+	  @Bean
+	  public PasswordEncoder passwordEncoderMethod() {
+			return new BCryptPasswordEncoder(12);
+	   }
 
 	
 	/*
@@ -49,6 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //			.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //			.and()
 			.authorizeRequests()
+				.antMatchers("/animes/admin/**").hasRole("ADMIN")
+				.antMatchers("/animes/**").hasRole("USER")
 				.anyRequest()
 				.authenticated()
 			.and()

@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
@@ -22,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ClientSpring {
 	
 	public static void main(String[] args) {
+		
+		
 
 //		tesGetWithRestTemplate();
 		

@@ -67,7 +67,8 @@ public class AnimeController {
 	 * @return
 	 */
 	@GetMapping("/list")
-	@PreAuthorize("hasRole('USER')")
+	//@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<Page<Anime>> listAll(Pageable pageable){
 		//logger.info("Date formatted {}", dateUtil.formatLocalDateTimeToDBStyle(LocalDateTime.now()));
 		//return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
@@ -119,8 +120,8 @@ public class AnimeController {
 		return ResponseEntity.ok(animeService.save(anime));
 	}
 	
-	@DeleteMapping(path ="/{id}")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@DeleteMapping(path ="/adminé/{id}")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Anime> deleteAnimeBydId(@PathVariable("id") int id){
 	
 		animeService.delete(id);	

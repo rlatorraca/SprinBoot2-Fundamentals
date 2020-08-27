@@ -13,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +23,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rlsp.springboot.fundamentals.domain.Anime;
 import com.rlsp.springboot.fundamentals.service.AnimeService;
 import com.rlsp.springboot.fundamentals.util.Utils;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -69,6 +73,10 @@ public class AnimeController {
 	@GetMapping("/list")
 	//@PreAuthorize("hasRole('ROLE_USER')")
 	@PreAuthorize("hasAuthority('USER')")
+	@Operation(summary = "List all animes paginated and sorted",
+    	description = "To use pagination and sort add the params ?page='number'&sort='field' to the url",
+    	tags = {"anime"})
+	@ResponseStatus
 	public ResponseEntity<Page<Anime>> listAll(Pageable pageable){
 		//logger.info("Date formatted {}", dateUtil.formatLocalDateTimeToDBStyle(LocalDateTime.now()));
 		//return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK); // Retorna a lista de Student e o Status da resposta HTTP
@@ -89,6 +97,7 @@ public class AnimeController {
 	 */
 	@GetMapping(path ="/{id}")
 	@PreAuthorize("hasAuthority('USER')")
+	@ResponseStatus
 	public ResponseEntity<Anime> getAnimeBydId(@PathVariable("id") int id, @AuthenticationPrincipal UserDetails userDetails){
 		 log.info("User Logged in {} ", userDetails);
 		return ResponseEntity.ok(animeService.findById(id));
@@ -101,6 +110,7 @@ public class AnimeController {
 	 */
 	@GetMapping(path ="/find")
 	@PreAuthorize("hasAuthority('USER')")
+	@ResponseStatus
 	public ResponseEntity<List<Anime>> findAnimeBydId(@RequestParam(value="name") String name){
 		 
 		return ResponseEntity.ok(animeService.findByName(name));
@@ -116,6 +126,7 @@ public class AnimeController {
 	 */
 	@PostMapping
 	@PreAuthorize("hasAuthority('USER')")
+	@ResponseStatus
 	public ResponseEntity<Anime> save(@RequestBody @Valid Anime anime){
 		
 		return ResponseEntity.ok(animeService.save(anime));
@@ -123,6 +134,11 @@ public class AnimeController {
 	
 	@DeleteMapping(path ="/admin/{id}")
 	@PreAuthorize("hasAuthority('ADMIN')")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "204",description = "Successful operation"),
+	        @ApiResponse(responseCode = "404",description = "Not found")
+	    })
+	@ResponseStatus
 	public ResponseEntity<Anime> deleteAnimeBydId(@PathVariable("id") int id){
 	
 		animeService.delete(id);	
@@ -131,6 +147,7 @@ public class AnimeController {
 	
 	@PutMapping
 	@PreAuthorize("hasAuthority('USER')")
+	@ResponseStatus
 	public ResponseEntity<Anime> update(@RequestBody Anime anime){
 		animeService.update(anime);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

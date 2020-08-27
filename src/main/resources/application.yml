@@ -23,4 +23,24 @@ logging:
         type:
           descriptor:
             sql:
-              BasicBinder: TRACE  
+              BasicBinder: TRACE
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html  
+  api-docs:
+    path: /api-docs
+ 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+
+info:
+  app: Spring Boot 2 Fundamentals - RLSP
+  linkined: https://www.linkedin.com/in/rodrigo-ls-pires/
+  github: https://github.com/rlatorraca/SprinBoot2-Fundamentals

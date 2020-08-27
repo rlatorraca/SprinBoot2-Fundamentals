@@ -88,7 +88,7 @@ public class AnimeController {
 	 * @PathVariable => usado para pegar o ID da assinatura da requisicao
 	 */
 	@GetMapping(path ="/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<Anime> getAnimeBydId(@PathVariable("id") int id, @AuthenticationPrincipal UserDetails userDetails){
 		 log.info("User Logged in {} ", userDetails);
 		return ResponseEntity.ok(animeService.findById(id));
@@ -99,8 +99,8 @@ public class AnimeController {
 	 * @RequestParams : usado para passar o parametros de requisicoes GET (?)
 	 * 
 	 */
-	@PreAuthorize("hasRole('USER')")
 	@GetMapping(path ="/find")
+	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<List<Anime>> findAnimeBydId(@RequestParam(value="name") String name){
 		 
 		return ResponseEntity.ok(animeService.findByName(name));
@@ -115,13 +115,14 @@ public class AnimeController {
 	 * 4) Retornando o padrao HATEOS
 	 */
 	@PostMapping
+	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<Anime> save(@RequestBody @Valid Anime anime){
 		
 		return ResponseEntity.ok(animeService.save(anime));
 	}
 	
-	@DeleteMapping(path ="/adminé/{id}")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping(path ="/admin/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Anime> deleteAnimeBydId(@PathVariable("id") int id){
 	
 		animeService.delete(id);	
@@ -129,7 +130,7 @@ public class AnimeController {
 	}
 	
 	@PutMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<Anime> update(@RequestBody Anime anime){
 		animeService.update(anime);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -3,6 +3,8 @@ server:
       include-stacktrace : on_trace_param
 
 spring:
+   application:
+      name: RLSP-SpringBoot2-Fundamentals
    datasource:
       url: jdbc:mysql://localhost:3307/anime?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=America/Halifax
       username: user
